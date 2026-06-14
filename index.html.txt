@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Astra</title>
+
+  <style>
+    :root {
+      --bg: #050711;
+      --card: rgba(255, 255, 255, 0.055);
+      --card-border: rgba(255, 255, 255, 0.14);
+      --text: #f5f7ff;
+      --muted: #9ca7c7;
+      --accent: #9db7ff;
+      --accent-soft: rgba(157, 183, 255, 0.16);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(95, 130, 255, 0.2), transparent 28%),
+        radial-gradient(circle at 80% 20%, rgba(180, 120, 255, 0.14), transparent 30%),
+        radial-gradient(circle at 50% 90%, rgba(60, 170, 255, 0.1), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(#ffffff 0.8px, transparent 0.8px);
+      background-size: 42px 42px;
+      opacity: 0.18;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 28px 0;
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(14px);
+      background: rgba(5, 7, 17, 0.68);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      z-index: 10;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .logo {
+      font-size: 0.95rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .hero {
+      min-height: 88vh;
+      display: grid;
+      align-items: center;
+      padding: 120px 0 160px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 28px;
+      padding: 8px 14px;
+      border: 1px solid var(--card-border);
+      border-radius: 999px;
+      background: var(--card);
+      color: var(--accent);
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 880px;
+      font-size: clamp(3.2rem, 9vw, 8.5rem);
+      line-height: 0.92;
+      letter-spacing: -0.08em;
+      font-weight: 700;
+      margin-bottom: 36px;
+    }
+
+    .hero p {
+      max-width: 680px;
+      color: var(--muted);
+      font-size: clamp(1.05rem, 2vw, 1.3rem);
+      margin-bottom: 48px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .button {
+      padding: 14px 22px;
+      border-radius: 999px;
+      border: 1px solid var(--card-border);
+      background: var(--card);
+      color: var(--text);
+      font-size: 0.95rem;
+      transition: 0.2s ease;
+    }
+
+    .button.primary {
+      background: var(--text);
+      color: var(--bg);
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.35);
+    }
+
+    section {
+      padding: 120px 0;
+    }
+
+    .section-header {
+      max-width: 680px;
+      margin-bottom: 56px;
+    }
+
+    .section-label {
+      color: var(--accent);
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 5vw, 4.5rem);
+      line-height: 1;
+      letter-spacing: -0.05em;
+      margin-bottom: 20px;
+    }
+
+    .section-header p {
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .card {
+      min-height: 260px;
+      padding: 28px;
+      border: 1px solid var(--card-border);
+      border-radius: 28px;
+      background: var(--card);
+      backdrop-filter: blur(20px);
+    }
+
+    .card-number {
+      color: var(--accent);
+      font-size: 0.8rem;
+      letter-spacing: 0.16em;
+      margin-bottom: 48px;
+    }
+
+    .card h3 {
+      font-size: 1.25rem;
+      margin-bottom: 14px;
+    }
+
+    .card p {
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+
+    .wide-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 44px;
+      align-items: center;
+      padding: 48px;
+      border: 1px solid var(--card-border);
+      border-radius: 36px;
+      background: linear-gradient(135deg, var(--card), rgba(157, 183, 255, 0.08));
+    }
+
+    .orbit {
+      width: min(360px, 100%);
+      aspect-ratio: 1;
+      margin: 0 auto;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 50%;
+      position: relative;
+    }
+
+    .orbit::before,
+    .orbit::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+    }
+
+    .orbit::before {
+      inset: 24%;
+      border: 1px solid rgba(255,255,255,0.18);
+    }
+
+    .orbit::after {
+      width: 18px;
+      height: 18px;
+      top: 14%;
+      left: 68%;
+      background: var(--accent);
+      box-shadow: 0 0 38px var(--accent);
+    }
+
+    .content-list {
+      display: grid;
+      gap: 18px;
+    }
+
+    .content-item {
+      padding: 24px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .content-item h3 {
+      font-size: 1.15rem;
+      margin-bottom: 8px;
+    }
+
+    .content-item p {
+      color: var(--muted);
+    }
+
+    footer {
+      padding: 60px 0 80px;
+      color: var(--muted);
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .edit-note {
+      margin-top: 32px;
+      padding: 22px;
+      border-radius: 20px;
+      background: var(--accent-soft);
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 800px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        padding: 100px 0 120px;
+      }
+
+      section {
+        padding: 88px 0;
+      }
+
+      .grid,
+      .wide-card {
+        grid-template-columns: 1fr;
+      }
+
+      .wide-card {
+        padding: 28px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <a href="#" class="logo">Project Astra</a>
+
+        <div class="nav-links">
+          <a href="#mission">Mission</a>
+          <a href="#features">Features</a>
+          <a href="#updates">Updates</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO SECTION -->
+    <!-- Edit the title and short description below. -->
+    <section class="hero">
+      <div class="container">
+        <span class="eyebrow">Space themed minimal website</span>
+
+        <h1>Project Astra</h1>
+
+        <p>
+          A calm, minimal, space-inspired home for your project.
+          Use this page to explain your idea, show progress, and guide visitors
+          through what you are building.
+        </p>
+
+        <div class="actions">
+          <a class="button primary" href="#mission">Explore Project</a>
+          <a class="button" href="#updates">View Updates</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- MISSION SECTION -->
+    <!-- Replace this with your own project purpose. -->
+    <section id="mission">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-label">Mission</div>
+          <h2>What this project is about.</h2>
+          <p>
+            Write a short, clear explanation of Project Astra here.
+            Focus on what problem it solves, who it helps, and why it matters.
+          </p>
+        </div>
+
+        <div class="wide-card">
+          <div>
+            <h3>Placeholder project summary</h3>
+            <p>
+              Project Astra is a space for experimentation, learning, and building.
+              This section can become your introduction, project overview, research summary,
+              product description, or personal portfolio.
+            </p>
+          </div>
+
+          <div class="orbit" aria-hidden="true"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES SECTION -->
+    <!-- Add or remove cards depending on your project. -->
+    <section id="features">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-label">Core Ideas</div>
+          <h2>Simple sections you can expand later.</h2>
+          <p>
+            These cards are intentionally spacious. Replace the text with your real
+            features, goals, milestones, or topics.
+          </p>
+        </div>
+
+        <div class="grid">
+          <article class="card">
+            <div class="card-number">01</div>
+            <h3>Research</h3>
+            <p>
+              Add notes, references, discoveries, or background information about your project.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="card-number">02</div>
+            <h3>Build</h3>
+            <p>
+              Describe the tools, design, code, hardware, or systems you are creating.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="card-number">03</div>
+            <h3>Launch</h3>
+            <p>
+              Share your roadmap, demo links, public releases, or next steps.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- UPDATES SECTION -->
+    <!-- Duplicate one .content-item block to add more updates. -->
+    <section id="updates">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-label">Updates</div>
+          <h2>Project log.</h2>
+          <p>
+            Use this area like a changelog or timeline. Newest updates can go first.
+          </p>
+        </div>
+
+        <div class="content-list">
+          <div class="content-item">
+            <h3>Update title goes here</h3>
+            <p>
+              Add a short update about what changed, what you learned, or what you built.
+            </p>
+          </div>
+
+          <div class="content-item">
+            <h3>Another update</h3>
+            <p>
+              You can duplicate this block whenever you want to add another project note.
+            </p>
+          </div>
+
+          <div class="content-item">
+            <h3>Future milestone</h3>
+            <p>
+              Add upcoming plans, target dates, or ideas you want to explore next.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW TO EDIT SECTION -->
+    <section>
+      <div class="container">
+        <div class="section-header">
+          <div class="section-label">Editing Guide</div>
+          <h2>How to add content later.</h2>
+          <p>
+            You only need to edit the text inside the HTML. Look for comments like
+            <strong>&lt;!-- HERO SECTION --&gt;</strong> or <strong>&lt;!-- FEATURES SECTION --&gt;</strong>.
+          </p>
+        </div>
+
+        <div class="grid">
+          <article class="card">
+            <div class="card-number">A</div>
+            <h3>Change the title</h3>
+            <p>
+              Search for <strong>Project Astra</strong> and replace it with your preferred project name.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="card-number">B</div>
+            <h3>Add a new card</h3>
+            <p>
+              Copy one full <strong>&lt;article class="card"&gt;</strong> block and paste it beside the others.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="card-number">C</div>
+            <h3>Add a new update</h3>
+            <p>
+              Copy one <strong>&lt;div class="content-item"&gt;</strong> block inside the Updates section.
+            </p>
+          </article>
+        </div>
+
+        <div class="edit-note">
+          Tip: keep paragraphs short. This design works best when each section has plenty of breathing room.
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <!-- Replace the email/link with your own. -->
+    <section id="contact">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-label">Contact</div>
+          <h2>Connect with the project.</h2>
+          <p>
+            Add your email, GitHub link, demo link, or social profile here.
+          </p>
+        </div>
+
+        <a class="button primary" href="mailto:your-email@example.com">
+          your-email@example.com
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <p>© 2026 Project Astra</p>
+      <p>Built for GitHub Pages</p>
+    </div>
+  </footer>
+</body>
+</html>
