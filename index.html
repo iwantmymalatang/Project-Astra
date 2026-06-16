@@ -3,541 +3,384 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Project Astra</title>
-
+  <meta name="description" content="Project ASTRA is an accessible student radio astronomy platform for 1420 MHz hydrogen-line observation, telescope engineering, RF signal processing, and future interferometry." />
+  <title>Project ASTRA | Student Radio Astronomy</title>
   <style>
     :root {
-      --bg: #050711;
-      --card: rgba(255, 255, 255, 0.055);
-      --card-border: rgba(255, 255, 255, 0.14);
-      --text: #f5f7ff;
-      --muted: #9ca7c7;
-      --accent: #9db7ff;
-      --accent-soft: rgba(157, 183, 255, 0.16);
+      --bg: #03040a;
+      --bg2: #071025;
+      --panel: rgba(255,255,255,.065);
+      --panel2: rgba(255,255,255,.1);
+      --line: rgba(255,255,255,.14);
+      --text: #f6f8ff;
+      --muted: #aab5d6;
+      --soft: #d7e0ff;
+      --accent: #8eb7ff;
+      --accent2: #b98cff;
+      --cyan: #7de8ff;
+      --shadow: 0 30px 100px rgba(0,0,0,.42);
+      --radius: 30px;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
     body {
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:
-        radial-gradient(circle at 20% 10%, rgba(95, 130, 255, 0.2), transparent 28%),
-        radial-gradient(circle at 80% 20%, rgba(180, 120, 255, 0.14), transparent 30%),
-        radial-gradient(circle at 50% 90%, rgba(60, 170, 255, 0.1), transparent 30%),
-        var(--bg);
-      color: var(--text);
-      line-height: 1.7;
       min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 8%, rgba(104,147,255,.22), transparent 28%),
+        radial-gradient(circle at 78% 18%, rgba(185,140,255,.18), transparent 30%),
+        radial-gradient(circle at 50% 95%, rgba(125,232,255,.12), transparent 36%),
+        linear-gradient(180deg, var(--bg), var(--bg2) 45%, #03040a);
+      line-height: 1.65;
       overflow-x: hidden;
     }
-
     body::before {
       content: "";
       position: fixed;
       inset: 0;
-      background-image:
-        radial-gradient(#ffffff 0.8px, transparent 0.8px);
-      background-size: 42px 42px;
-      opacity: 0.18;
+      background-image: radial-gradient(rgba(255,255,255,.9) .7px, transparent .7px);
+      background-size: 48px 48px;
+      opacity: .13;
+      pointer-events: none;
+      z-index: -2;
+    }
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(255,255,255,.03) 1px, transparent 1px);
+      background-size: 100px 100px;
+      mask-image: radial-gradient(circle at 50% 35%, black, transparent 72%);
       pointer-events: none;
       z-index: -1;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
+    a { color: inherit; text-decoration: none; }
+    img { display: block; width: 100%; height: auto; }
+    .container { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+
+    .nav {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(3,4,10,.65);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      backdrop-filter: blur(18px);
     }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 20px 0; }
+    .brand { display: inline-flex; align-items: center; gap: 12px; font-weight: 750; letter-spacing: .16em; text-transform: uppercase; font-size: .9rem; }
+    .brand-mark { width: 30px; height: 30px; border-radius: 50%; border: 1px solid rgba(255,255,255,.35); position: relative; box-shadow: 0 0 32px rgba(142,183,255,.55); }
+    .brand-mark::before { content: ""; position: absolute; inset: 7px; border-radius: 50%; border: 1px dashed rgba(255,255,255,.25); }
+    .brand-mark::after { content: ""; position: absolute; width: 7px; height: 7px; border-radius: 50%; right: -2px; top: 7px; background: var(--cyan); box-shadow: 0 0 20px var(--cyan); }
+    .nav-links { display: flex; gap: 24px; color: var(--muted); font-size: .92rem; }
+    .nav-links a:hover { color: var(--text); }
 
-    .container {
-      width: min(1120px, calc(100% - 40px));
-      margin: 0 auto;
-    }
+    .hero { min-height: 92vh; display: grid; align-items: center; padding: 105px 0 130px; }
+    .hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 68px; align-items: center; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 28px; padding: 8px 14px; border-radius: 999px; border: 1px solid rgba(142,183,255,.28); background: rgba(142,183,255,.08); color: var(--accent); letter-spacing: .14em; text-transform: uppercase; font-size: .76rem; }
+    .pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 20px var(--cyan); }
+    h1 { max-width: 900px; font-size: clamp(3.5rem, 8vw, 8.7rem); line-height: .88; letter-spacing: -.085em; margin-bottom: 32px; }
+    .hero-lead { color: var(--soft); max-width: 720px; font-size: clamp(1.12rem, 2vw, 1.38rem); margin-bottom: 42px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 14px; }
+    .button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 13px 21px; border-radius: 999px; border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.06); transition: .2s ease; }
+    .button.primary { background: var(--text); color: #03040a; border-color: var(--text); }
+    .button:hover { transform: translateY(-2px); border-color: rgba(255,255,255,.34); }
 
-    header {
-      padding: 28px 0;
-      position: sticky;
-      top: 0;
-      backdrop-filter: blur(14px);
-      background: rgba(5, 7, 17, 0.68);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-      z-index: 10;
-    }
+    .hero-card { border-radius: 40px; overflow: hidden; border: 1px solid var(--line); background: var(--panel); box-shadow: var(--shadow); position: relative; min-height: 560px; }
+    .hero-card img { height: 560px; object-fit: cover; filter: saturate(.92) contrast(1.05) brightness(.82); }
+    .hero-card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(3,4,10,.86)); }
+    .stats { position: absolute; left: 20px; right: 20px; bottom: 20px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; z-index: 2; }
+    .stat { padding: 14px; border-radius: 18px; border: 1px solid rgba(255,255,255,.14); background: rgba(3,4,10,.72); backdrop-filter: blur(12px); }
+    .stat strong { display: block; font-size: 1.18rem; }
+    .stat span { color: var(--muted); font-size: .77rem; }
 
-    nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 24px;
-    }
+    section { padding: 112px 0; }
+    .section-head { max-width: 820px; margin-bottom: 52px; }
+    .label { color: var(--accent); font-size: .78rem; letter-spacing: .16em; text-transform: uppercase; margin-bottom: 15px; }
+    h2 { font-size: clamp(2.1rem, 5vw, 4.7rem); line-height: .96; letter-spacing: -.06em; margin-bottom: 20px; }
+    .section-head p, .large-text { color: var(--muted); font-size: 1.08rem; max-width: 840px; }
+    .mission-panel { padding: clamp(30px, 5vw, 58px); border-radius: 38px; border: 1px solid rgba(142,183,255,.28); background: linear-gradient(135deg, rgba(142,183,255,.13), rgba(185,140,255,.08)), rgba(255,255,255,.05); box-shadow: var(--shadow); }
+    .mission-panel p { color: var(--text); font-size: clamp(1.35rem, 3vw, 2.35rem); line-height: 1.22; letter-spacing: -.045em; }
 
-    .logo {
-      font-size: 0.95rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--text);
-    }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+    .card { min-height: 245px; padding: 28px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--panel); backdrop-filter: blur(16px); }
+    .card.media { padding: 0; overflow: hidden; }
+    .card.media img { height: 265px; object-fit: cover; }
+    .card.media .copy { padding: 24px; }
+    .card-number { color: var(--accent); font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 42px; }
+    h3 { font-size: 1.25rem; margin-bottom: 12px; letter-spacing: -.02em; }
+    .card p, .card li, .timeline-item div:last-child { color: var(--muted); font-size: .98rem; }
+    ul { list-style: none; display: grid; gap: 10px; margin-top: 16px; }
+    li::before { content: "✦"; color: var(--accent); margin-right: 10px; }
 
-    .nav-links {
-      display: flex;
-      gap: 28px;
-      font-size: 0.9rem;
-      color: var(--muted);
-    }
+    .feature-row { display: grid; grid-template-columns: .95fr 1.05fr; gap: 22px; align-items: stretch; }
+    .feature-image { min-height: 420px; border-radius: 34px; overflow: hidden; border: 1px solid var(--line); background: var(--panel); box-shadow: var(--shadow); }
+    .feature-image img { height: 100%; object-fit: cover; }
+    .feature-copy { padding: 38px; border-radius: 34px; border: 1px solid var(--line); background: var(--panel); }
 
-    .nav-links a:hover {
-      color: var(--text);
-    }
+    .pipeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .pipe-step { min-height: 155px; padding: 22px; border: 1px solid var(--line); border-radius: 24px; background: rgba(255,255,255,.055); position: relative; }
+    .pipe-step::after { content: "→"; position: absolute; right: -14px; top: 50%; transform: translateY(-50%); color: var(--accent); }
+    .pipe-step:last-child::after { display: none; }
+    .pipe-step span { color: var(--accent); font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; }
+    .pipe-step h3 { margin-top: 18px; }
 
-    .hero {
-      min-height: 88vh;
-      display: grid;
-      align-items: center;
-      padding: 120px 0 160px;
-    }
+    .spec-table { width: 100%; border-collapse: collapse; overflow: hidden; border-radius: 24px; border: 1px solid var(--line); background: rgba(255,255,255,.045); }
+    .spec-table th, .spec-table td { padding: 18px; text-align: left; border-bottom: 1px solid rgba(255,255,255,.09); color: var(--muted); }
+    .spec-table th { color: var(--text); font-weight: 700; background: rgba(255,255,255,.065); }
+    .spec-table tr:last-child td { border-bottom: 0; }
 
-    .eyebrow {
-      display: inline-block;
-      margin-bottom: 28px;
-      padding: 8px 14px;
-      border: 1px solid var(--card-border);
-      border-radius: 999px;
-      background: var(--card);
-      color: var(--accent);
-      font-size: 0.78rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-    }
+    .gallery { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
+    .gallery-card { border-radius: 28px; overflow: hidden; border: 1px solid var(--line); background: var(--panel); min-height: 260px; position: relative; }
+    .gallery-card.large { grid-column: span 7; min-height: 430px; }
+    .gallery-card.medium { grid-column: span 5; min-height: 430px; }
+    .gallery-card.small { grid-column: span 4; }
+    .gallery-card img { height: 100%; object-fit: cover; }
+    .caption { position: absolute; left: 16px; right: 16px; bottom: 16px; z-index: 2; padding: 14px; border-radius: 18px; background: rgba(3,4,10,.72); border: 1px solid rgba(255,255,255,.12); backdrop-filter: blur(12px); }
+    .caption strong { display: block; }
+    .caption span { display: block; color: var(--muted); font-size: .85rem; }
+    .gallery-card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(3,4,10,.86)); pointer-events: none; }
 
-    h1 {
-      max-width: 880px;
-      font-size: clamp(3.2rem, 9vw, 8.5rem);
-      line-height: 0.92;
-      letter-spacing: -0.08em;
-      font-weight: 700;
-      margin-bottom: 36px;
-    }
+    .timeline { display: grid; gap: 14px; }
+    .timeline-item { display: grid; grid-template-columns: 125px 1fr; gap: 18px; padding: 20px; border: 1px solid var(--line); border-radius: 24px; background: rgba(255,255,255,.045); }
+    .month { color: var(--accent); font-weight: 750; letter-spacing: .08em; text-transform: uppercase; font-size: .82rem; }
 
-    .hero p {
-      max-width: 680px;
-      color: var(--muted);
-      font-size: clamp(1.05rem, 2vw, 1.3rem);
-      margin-bottom: 48px;
-    }
+    .footer { padding: 70px 0 90px; border-top: 1px solid rgba(255,255,255,.08); color: var(--muted); }
+    .footer-inner { display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+    .reveal { opacity: 0; transform: translateY(18px); transition: .7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
 
-    .actions {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .button {
-      padding: 14px 22px;
-      border-radius: 999px;
-      border: 1px solid var(--card-border);
-      background: var(--card);
-      color: var(--text);
-      font-size: 0.95rem;
-      transition: 0.2s ease;
-    }
-
-    .button.primary {
-      background: var(--text);
-      color: var(--bg);
-    }
-
-    .button:hover {
-      transform: translateY(-2px);
-      border-color: rgba(255, 255, 255, 0.35);
-    }
-
-    section {
-      padding: 120px 0;
-    }
-
-    .section-header {
-      max-width: 680px;
-      margin-bottom: 56px;
-    }
-
-    .section-label {
-      color: var(--accent);
-      font-size: 0.78rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      margin-bottom: 16px;
-    }
-
-    h2 {
-      font-size: clamp(2rem, 5vw, 4.5rem);
-      line-height: 1;
-      letter-spacing: -0.05em;
-      margin-bottom: 20px;
-    }
-
-    .section-header p {
-      color: var(--muted);
-      font-size: 1.05rem;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-    }
-
-    .card {
-      min-height: 260px;
-      padding: 28px;
-      border: 1px solid var(--card-border);
-      border-radius: 28px;
-      background: var(--card);
-      backdrop-filter: blur(20px);
-    }
-
-    .card-number {
-      color: var(--accent);
-      font-size: 0.8rem;
-      letter-spacing: 0.16em;
-      margin-bottom: 48px;
-    }
-
-    .card h3 {
-      font-size: 1.25rem;
-      margin-bottom: 14px;
-    }
-
-    .card p {
-      color: var(--muted);
-      font-size: 0.98rem;
-    }
-
-    .wide-card {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 44px;
-      align-items: center;
-      padding: 48px;
-      border: 1px solid var(--card-border);
-      border-radius: 36px;
-      background: linear-gradient(135deg, var(--card), rgba(157, 183, 255, 0.08));
-    }
-
-    .orbit {
-      width: min(360px, 100%);
-      aspect-ratio: 1;
-      margin: 0 auto;
-      border: 1px solid rgba(255,255,255,0.18);
-      border-radius: 50%;
-      position: relative;
-    }
-
-    .orbit::before,
-    .orbit::after {
-      content: "";
-      position: absolute;
-      border-radius: 50%;
-    }
-
-    .orbit::before {
-      inset: 24%;
-      border: 1px solid rgba(255,255,255,0.18);
-    }
-
-    .orbit::after {
-      width: 18px;
-      height: 18px;
-      top: 14%;
-      left: 68%;
-      background: var(--accent);
-      box-shadow: 0 0 38px var(--accent);
-    }
-
-    .content-list {
-      display: grid;
-      gap: 18px;
-    }
-
-    .content-item {
-      padding: 24px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.12);
-    }
-
-    .content-item h3 {
-      font-size: 1.15rem;
-      margin-bottom: 8px;
-    }
-
-    .content-item p {
-      color: var(--muted);
-    }
-
-    footer {
-      padding: 60px 0 80px;
-      color: var(--muted);
-      border-top: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .footer-inner {
-      display: flex;
-      justify-content: space-between;
-      gap: 24px;
-      flex-wrap: wrap;
-    }
-
-    .edit-note {
-      margin-top: 32px;
-      padding: 22px;
-      border-radius: 20px;
-      background: var(--accent-soft);
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-
-    @media (max-width: 800px) {
-      .nav-links {
-        display: none;
-      }
-
-      .hero {
-        padding: 100px 0 120px;
-      }
-
-      section {
-        padding: 88px 0;
-      }
-
-      .grid,
-      .wide-card {
-        grid-template-columns: 1fr;
-      }
-
-      .wide-card {
-        padding: 28px;
-      }
+    @media (max-width: 960px) {
+      .hero-grid, .feature-row, .grid-3, .grid-2, .pipeline { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .hero { padding: 85px 0 110px; }
+      .hero-card, .hero-card img { min-height: 420px; height: 420px; }
+      .pipe-step::after { display: none; }
+      .gallery { grid-template-columns: 1fr; }
+      .gallery-card.large, .gallery-card.medium, .gallery-card.small { grid-column: auto; min-height: 320px; }
+      .timeline-item { grid-template-columns: 1fr; }
     }
   </style>
 </head>
-
 <body>
-  <header>
-    <div class="container">
-      <nav>
-        <a href="#" class="logo">Project Astra</a>
-
-        <div class="nav-links">
-          <a href="#mission">Mission</a>
-          <a href="#features">Features</a>
-          <a href="#updates">Updates</a>
-          <a href="#contact">Contact</a>
-        </div>
-      </nav>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="#top" aria-label="Project ASTRA home"><span class="brand-mark"></span><span>Project ASTRA</span></a>
+      <div class="nav-links">
+        <a href="#mission">Mission</a>
+        <a href="#design">Design</a>
+        <a href="#prototype">Prototype</a>
+        <a href="#network">Network</a>
+        <a href="#roadmap">Roadmap</a>
+      </div>
     </div>
-  </header>
+  </nav>
 
-  <main>
-    <!-- HERO SECTION -->
-    <!-- Edit the title and short description below. -->
+  <main id="top">
     <section class="hero">
-      <div class="container">
-        <span class="eyebrow">Space themed minimal website</span>
-
-        <h1>Project Astra</h1>
-
-        <p>
-          A calm, minimal, space-inspired home for your project.
-          Use this page to explain your idea, show progress, and guide visitors
-          through what you are building.
-        </p>
-
-        <div class="actions">
-          <a class="button primary" href="#mission">Explore Project</a>
-          <a class="button" href="#updates">View Updates</a>
+      <div class="container hero-grid">
+        <div class="reveal">
+          <div class="eyebrow"><span class="pulse"></span> 1420 MHz • Hydrogen Line • Student Built</div>
+          <h1>Radio astronomy for every curious student.</h1>
+          <p class="hero-lead">Project ASTRA is a low-cost, customizable radio telescope platform for schools, astronomy CCAs, and research students — built to make hydrogen-line astronomy, RF signal processing, telescope engineering, and interferometry accessible.</p>
+          <div class="actions">
+            <a class="button primary" href="#mission">Explore the Mission</a>
+            <a class="button" href="#prototype">View Prototype</a>
+          </div>
+        </div>
+        <div class="hero-card reveal">
+          <img src="assets/hero_dish.jpg" alt="Project ASTRA 1-meter parabolic dish prototype" />
+          <div class="stats">
+            <div class="stat"><strong>1 m</strong><span>ASTRA 100A</span></div>
+            <div class="stat"><strong>0.4</strong><span>f/D ratio</span></div>
+            <div class="stat"><strong>21 cm</strong><span>HI line</span></div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- MISSION SECTION -->
-    <!-- Replace this with your own project purpose. -->
     <section id="mission">
       <div class="container">
-        <div class="section-header">
-          <div class="section-label">Mission</div>
-          <h2>What this project is about.</h2>
-          <p>
-            Write a short, clear explanation of Project Astra here.
-            Focus on what problem it solves, who it helps, and why it matters.
-          </p>
+        <div class="section-head reveal">
+          <div class="label">Mission</div>
+          <h2>Make the invisible sky accessible.</h2>
         </div>
-
-        <div class="wide-card">
-          <div>
-            <h3>Placeholder project summary</h3>
-            <p>
-              Project Astra is a space for experimentation, learning, and building.
-              This section can become your introduction, project overview, research summary,
-              product description, or personal portfolio.
-            </p>
-          </div>
-
-          <div class="orbit" aria-hidden="true"></div>
+        <div class="mission-panel reveal">
+          <p>ASTRA exists to turn radio astronomy from something locked inside expensive facilities into a hands-on learning platform that students can build, modify, observe with, and expand into collaborative telescope arrays.</p>
         </div>
       </div>
     </section>
 
-    <!-- FEATURES SECTION -->
-    <!-- Add or remove cards depending on your project. -->
-    <section id="features">
+    <section id="problem">
       <div class="container">
-        <div class="section-header">
-          <div class="section-label">Core Ideas</div>
-          <h2>Simple sections you can expand later.</h2>
-          <p>
-            These cards are intentionally spacious. Replace the text with your real
-            features, goals, milestones, or topics.
-          </p>
+        <div class="section-head reveal">
+          <div class="label">Problem & Context</div>
+          <h2>Students need access to real signals, not just theory.</h2>
+          <p>Professional radio telescopes are expensive, difficult to access, and usually not designed for student-level customization. ASTRA bridges the gap by combining an affordable dish, feedhorn, receiver chain, and software pipeline that students can understand from first principles.</p>
         </div>
-
-        <div class="grid">
-          <article class="card">
-            <div class="card-number">01</div>
-            <h3>Research</h3>
-            <p>
-              Add notes, references, discoveries, or background information about your project.
-            </p>
-          </article>
-
-          <article class="card">
-            <div class="card-number">02</div>
-            <h3>Build</h3>
-            <p>
-              Describe the tools, design, code, hardware, or systems you are creating.
-            </p>
-          </article>
-
-          <article class="card">
-            <div class="card-number">03</div>
-            <h3>Launch</h3>
-            <p>
-              Share your roadmap, demo links, public releases, or next steps.
-            </p>
-          </article>
+        <div class="grid-3">
+          <article class="card reveal"><div class="card-number">01</div><h3>Astrophysics</h3><p>Observe the 1420 MHz neutral hydrogen line to explore the structure and dynamics of the Milky Way.</p></article>
+          <article class="card reveal"><div class="card-number">02</div><h3>Engineering</h3><p>Build a parabolic reflector, feedhorn, Az-El mount, gearing system, and stable mechanical platform.</p></article>
+          <article class="card reveal"><div class="card-number">03</div><h3>Computing</h3><p>Process spectra through SDR and software tools, then extend toward synchronization and correlation.</p></article>
         </div>
       </div>
     </section>
 
-    <!-- UPDATES SECTION -->
-    <!-- Duplicate one .content-item block to add more updates. -->
-    <section id="updates">
+    <section id="design">
       <div class="container">
-        <div class="section-header">
-          <div class="section-label">Updates</div>
-          <h2>Project log.</h2>
-          <p>
-            Use this area like a changelog or timeline. Newest updates can go first.
-          </p>
+        <div class="section-head reveal">
+          <div class="label">System Design</div>
+          <h2>A modular 1420 MHz telescope platform.</h2>
+          <p>The ASTRA 100A uses a 1-meter parabolic reflector, pyramidal feedhorn, Az-El rotating base, low-noise amplifier, software-defined radio, and computer-side signal processing.</p>
         </div>
-
-        <div class="content-list">
-          <div class="content-item">
-            <h3>Update title goes here</h3>
-            <p>
-              Add a short update about what changed, what you learned, or what you built.
-            </p>
-          </div>
-
-          <div class="content-item">
-            <h3>Another update</h3>
-            <p>
-              You can duplicate this block whenever you want to add another project note.
-            </p>
-          </div>
-
-          <div class="content-item">
-            <h3>Future milestone</h3>
-            <p>
-              Add upcoming plans, target dates, or ideas you want to explore next.
-            </p>
+        <div class="feature-row reveal">
+          <div class="feature-image"><img src="assets/dish_render.jpg" alt="CAD rendering of ASTRA parabolic dish" /></div>
+          <div class="feature-copy">
+            <div class="label">ASTRA 100A</div>
+            <h2>Designed for real student construction.</h2>
+            <p class="large-text">The reflector is split into printable segments, then sanded and covered with a conductive aluminium layer to reflect incoming radio waves toward the focus. The structure supports both quick assembly and more permanent screw or rivet-based construction.</p>
+            <ul>
+              <li>1-meter parabolic dish with f/D = 0.4</li>
+              <li>3D-printed segmented reflector</li>
+              <li>Aluminium reflective surface</li>
+              <li>Portable design for school deployment</li>
+            </ul>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- HOW TO EDIT SECTION -->
-    <section>
+    <section id="components">
       <div class="container">
-        <div class="section-header">
-          <div class="section-label">Editing Guide</div>
-          <h2>How to add content later.</h2>
-          <p>
-            You only need to edit the text inside the HTML. Look for comments like
-            <strong>&lt;!-- HERO SECTION --&gt;</strong> or <strong>&lt;!-- FEATURES SECTION --&gt;</strong>.
-          </p>
-        </div>
-
-        <div class="grid">
-          <article class="card">
-            <div class="card-number">A</div>
-            <h3>Change the title</h3>
-            <p>
-              Search for <strong>Project Astra</strong> and replace it with your preferred project name.
-            </p>
+        <div class="grid-3">
+          <article class="card media reveal">
+            <img src="assets/feedhorn_render.png" alt="Pyramidal feedhorn CAD design" />
+            <div class="copy"><h3>Pyramidal feedhorn</h3><p>Selected for ease of fabrication, controllable beamwidth, and practical 1420 MHz dish illumination.</p></div>
           </article>
-
-          <article class="card">
-            <div class="card-number">B</div>
-            <h3>Add a new card</h3>
-            <p>
-              Copy one full <strong>&lt;article class="card"&gt;</strong> block and paste it beside the others.
-            </p>
+          <article class="card media reveal">
+            <img src="assets/mount_render.jpg" alt="Azimuth elevation mount CAD design" />
+            <div class="copy"><h3>Az-El mount</h3><p>Points the telescope across the sky using azimuth and elevation movement with stepper motor control.</p></div>
           </article>
-
-          <article class="card">
-            <div class="card-number">C</div>
-            <h3>Add a new update</h3>
-            <p>
-              Copy one <strong>&lt;div class="content-item"&gt;</strong> block inside the Updates section.
-            </p>
+          <article class="card media reveal">
+            <img src="assets/electronics_lna.jpg" alt="Low noise amplifier component for radio telescope receiver chain" />
+            <div class="copy"><h3>Receiver chain</h3><p>Signal path: feedhorn probe → low-noise amplifier → software-defined radio → processing software.</p></div>
           </article>
-        </div>
-
-        <div class="edit-note">
-          Tip: keep paragraphs short. This design works best when each section has plenty of breathing room.
         </div>
       </div>
     </section>
 
-    <!-- CONTACT SECTION -->
-    <!-- Replace the email/link with your own. -->
-    <section id="contact">
+    <section id="pipeline">
       <div class="container">
-        <div class="section-header">
-          <div class="section-label">Contact</div>
-          <h2>Connect with the project.</h2>
-          <p>
-            Add your email, GitHub link, demo link, or social profile here.
-          </p>
+        <div class="section-head reveal">
+          <div class="label">Hardware Pipeline</div>
+          <h2>From cosmic radio waves to student data.</h2>
         </div>
+        <div class="pipeline">
+          <div class="pipe-step reveal"><span>Step 01</span><h3>Telescope</h3><p class="large-text">The dish and feedhorn collect and couple weak 1420 MHz radio signals.</p></div>
+          <div class="pipe-step reveal"><span>Step 02</span><h3>LNA</h3><p class="large-text">A low-noise amplifier placed near the feed preserves the faint signal.</p></div>
+          <div class="pipe-step reveal"><span>Step 03</span><h3>SDR</h3><p class="large-text">A software-defined radio digitizes the received spectrum.</p></div>
+          <div class="pipe-step reveal"><span>Step 04</span><h3>Software</h3><p class="large-text">GNU Radio or custom tools process, visualize, and store observations.</p></div>
+        </div>
+      </div>
+    </section>
 
-        <a class="button primary" href="mailto:your-email@example.com">
-          your-email@example.com
-        </a>
+    <section id="models">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="label">Models</div>
+          <h2>ASTRA 100A and ASTRA 230A.</h2>
+          <p>ASTRA begins with a feasible 1-meter prototype and extends toward a larger 2.3-meter design for improved capability and comparison with commercial systems.</p>
+        </div>
+        <table class="spec-table reveal">
+          <thead><tr><th>Specification</th><th>ASTRA 100A</th><th>ASTRA 230A</th></tr></thead>
+          <tbody>
+            <tr><td>Dish diameter</td><td>1 meter</td><td>2.3 meters</td></tr>
+            <tr><td>Focal ratio</td><td>0.4</td><td>0.4</td></tr>
+            <tr><td>Reflector type</td><td>Parabolic</td><td>Parabolic</td></tr>
+            <tr><td>Feed</td><td>Pyramidal feedhorn</td><td>Pyramidal feedhorn</td></tr>
+            <tr><td>Mount</td><td>Az-El rotating base</td><td>Larger Az-El rotating base</td></tr>
+            <tr><td>Estimated weight</td><td>~4.056 kg</td><td>≤ 28 kg target</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="prototype">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="label">Prototype Gallery</div>
+          <h2>From CAD to physical build.</h2>
+          <p>ASTRA is built around practical fabrication: printed dish sections, mechanical ribs, secure clips, reflective lining, and a receiver chain that students can assemble and understand.</p>
+        </div>
+        <div class="gallery">
+          <div class="gallery-card large reveal"><img src="assets/dish_detail_1.jpg" alt="Close view of ASTRA parabolic dish ribs and panels" /><div class="caption"><strong>Dish structure</strong><span>Segmented reflector with ribs and panel joints.</span></div></div>
+          <div class="gallery-card medium reveal"><img src="assets/dish_side_render.jpg" alt="Side CAD view of ASTRA parabolic dish" /><div class="caption"><strong>Dish geometry</strong><span>CAD view of reflector shape and focal structure.</span></div></div>
+          <div class="gallery-card small reveal"><img src="assets/dish_detail_2.jpg" alt="Prototype dish panel details" /><div class="caption"><strong>Assembly details</strong><span>Printed sections designed for repeatable construction.</span></div></div>
+          <div class="gallery-card small reveal"><img src="assets/dish_detail_3.jpg" alt="ASTRA reflector panel seam details" /><div class="caption"><strong>Reflector panels</strong><span>Panel alignment and surface finishing process.</span></div></div>
+          <div class="gallery-card small reveal"><img src="assets/dish_clip.jpg" alt="Secure clip and fastening detail on ASTRA dish prototype" /><div class="caption"><strong>Fastening</strong><span>Clips and screws improve rigidity and portability.</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="network">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="label">Long-Term Vision</div>
+          <h2>An island-wide student interferometry network.</h2>
+          <p>The ideal future is a modular network of school-based ASTRA telescopes. Each school can use its telescope independently, while the wider network can explore synchronization, correlation, and interferometric concepts.</p>
+        </div>
+        <div class="feature-row reveal">
+          <div class="feature-copy">
+            <div class="label">Accessible Collaboration</div>
+            <h2>One telescope becomes many.</h2>
+            <p class="large-text">The project’s second phase explores synchronization between telescopes. A close-distance proof of concept can use a shared master clock, while longer baselines may require GPS-disciplined oscillators.</p>
+            <ul>
+              <li>School nodes connected through an online network</li>
+              <li>Research into phase comparison and correlation</li>
+              <li>Collaborative STEM platform for students</li>
+            </ul>
+          </div>
+          <div class="feature-image"><img src="assets/island_network.jpg" alt="Singapore school network concept map for collaborative telescope array" /></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="roadmap">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="label">Roadmap</div>
+          <h2>Project timeline.</h2>
+        </div>
+        <div class="timeline">
+          <div class="timeline-item reveal"><div class="month">January</div><div>Ideation and research.</div></div>
+          <div class="timeline-item reveal"><div class="month">February</div><div>3D modelling and design.</div></div>
+          <div class="timeline-item reveal"><div class="month">March</div><div>Fabrication and early prototype work.</div></div>
+          <div class="timeline-item reveal"><div class="month">April</div><div>Proposal evaluation and design refinement.</div></div>
+          <div class="timeline-item reveal"><div class="month">May</div><div>Complete core ASTRA 100A build.</div></div>
+          <div class="timeline-item reveal"><div class="month">June–July</div><div>ASTRA 230A planning, synchronization blueprint, and proof-of-concept testing.</div></div>
+          <div class="timeline-item reveal"><div class="month">August</div><div>Final evaluation, documentation, and public project presentation.</div></div>
+        </div>
       </div>
     </section>
   </main>
 
-  <footer>
+  <footer class="footer">
     <div class="container footer-inner">
-      <p>© 2026 Project Astra</p>
-      <p>Built for GitHub Pages</p>
+      <p>© 2026 Project ASTRA</p>
+      <p>Amateur Synchronised Telescope for Radio Astronomy</p>
     </div>
   </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+  </script>
 </body>
 </html>
